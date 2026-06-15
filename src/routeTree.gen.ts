@@ -13,7 +13,6 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SafetyZonesRouteImport } from './routes/safety-zones'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as HealthInsightsRouteImport } from './routes/health-insights'
 import { Route as FamilyGroupRouteImport } from './routes/family-group'
 import { Route as DevicesRouteImport } from './routes/devices'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -39,11 +38,6 @@ const RegisterRoute = RegisterRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HealthInsightsRoute = HealthInsightsRouteImport.update({
-  id: '/health-insights',
-  path: '/health-insights',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FamilyGroupRoute = FamilyGroupRouteImport.update({
@@ -84,7 +78,6 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/devices': typeof DevicesRoute
   '/family-group': typeof FamilyGroupRoute
-  '/health-insights': typeof HealthInsightsRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/safety-zones': typeof SafetyZonesRoute
@@ -97,7 +90,6 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/devices': typeof DevicesRoute
   '/family-group': typeof FamilyGroupRoute
-  '/health-insights': typeof HealthInsightsRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/safety-zones': typeof SafetyZonesRoute
@@ -111,7 +103,6 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/devices': typeof DevicesRoute
   '/family-group': typeof FamilyGroupRoute
-  '/health-insights': typeof HealthInsightsRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/safety-zones': typeof SafetyZonesRoute
@@ -126,7 +117,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/devices'
     | '/family-group'
-    | '/health-insights'
     | '/login'
     | '/register'
     | '/safety-zones'
@@ -139,7 +129,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/devices'
     | '/family-group'
-    | '/health-insights'
     | '/login'
     | '/register'
     | '/safety-zones'
@@ -152,7 +141,6 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/devices'
     | '/family-group'
-    | '/health-insights'
     | '/login'
     | '/register'
     | '/safety-zones'
@@ -166,7 +154,6 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   DevicesRoute: typeof DevicesRoute
   FamilyGroupRoute: typeof FamilyGroupRoute
-  HealthInsightsRoute: typeof HealthInsightsRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   SafetyZonesRoute: typeof SafetyZonesRoute
@@ -201,13 +188,6 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/health-insights': {
-      id: '/health-insights'
-      path: '/health-insights'
-      fullPath: '/health-insights'
-      preLoaderRoute: typeof HealthInsightsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/family-group': {
@@ -262,7 +242,6 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   DevicesRoute: DevicesRoute,
   FamilyGroupRoute: FamilyGroupRoute,
-  HealthInsightsRoute: HealthInsightsRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   SafetyZonesRoute: SafetyZonesRoute,

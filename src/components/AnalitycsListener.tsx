@@ -23,9 +23,9 @@ export function AnalyticsListener() {
 
     ReactGA.send({
       hitType: 'pageview',
-      page: location.pathname + location.search,
+      page: location.href,
     })
-  }, [location.pathname, location.search])
+  }, [location.href])
 
   return null
 }

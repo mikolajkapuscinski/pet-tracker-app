@@ -1,4 +1,4 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { AnalyticsListener } from '../components/AnalitycsListener'
@@ -31,7 +31,17 @@ export const Route = createRootRoute({
   }),
   shellComponent: RootDocument,
   notFoundComponent: NotFoundPage,
+  component: RootApp,
 })
+
+function RootApp() {
+  return (
+    <>
+      <AnalyticsListener />
+      <Outlet />
+    </>
+  )
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -42,7 +52,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[rgba(13,148,136,0.22)]">
-        <AnalyticsListener />
         {children}
         <TanStackDevtools
           config={{

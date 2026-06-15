@@ -61,7 +61,7 @@ function LoginPage() {
           <div className="mt-12 rounded-3xl border border-teal-100 bg-teal-50/70 p-5">
             <p className="text-sm font-bold">Secure access</p>
             <p className="mt-2 text-sm leading-6 text-slate-500">
-              Zaloguj się, żeby monitorować urządzenia, strefy bezpieczeństwa i status pupili.
+                Login to monitor devices, safety zones, and pet status in one place.
             </p>
 
             <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold text-teal-700 shadow-sm">
@@ -86,8 +86,7 @@ function LoginPage() {
                 </h1>
 
                 <p className="mt-5 max-w-lg text-lg leading-8 text-slate-500">
-                  Panel monitoringu pozwala sprawdzać lokalizację, status urządzeń,
-                  alerty i historię bezpieczeństwa w jednym miejscu.
+                    Monitor your pets' location, safety zones, and device status all in one place.
                 </p>
 
                 <div className="mt-8 rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-xl shadow-slate-200/70 backdrop-blur">
@@ -128,7 +127,7 @@ function LoginPage() {
                   </h2>
 
                   <p className="mt-2 text-sm leading-6 text-slate-500">
-                    Wróć do panelu PetGuard Pro i kontynuuj monitoring.
+                    Return to your PetGuard Pro dashboard and continue monitoring your pets' safety zones, live location, and device status in one place.
                   </p>
                 </div>
 
