@@ -37,6 +37,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <script src="https://t.contentsquare.net/uxa/8e53471f850f5.js" defer></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-RRMW7HNKMV"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){window.dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-RRMW7HNKMV');
+            `,
+          }}
+        />
         <HeadContent />
       </head>
       <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[rgba(13,148,136,0.22)]">

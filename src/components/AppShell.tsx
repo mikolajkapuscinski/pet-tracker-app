@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import {
   BatteryCharging,
   Bell,
@@ -11,8 +11,13 @@ import {
   ShieldCheck,
   Settings2,
   Users,
+  LogOut,
+  UserRound,  
 } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
+import { ProtectedRoute } from './auth/ProtectedRoute'
+import { logout } from '#/lib/auth'
+import { useFirebaseUser } from '#/hooks/useFirebaseUser'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -56,7 +61,20 @@ function NavItem({
 }
 
 export default function AppShell({ title, subtitle, badge, children }: AppShellProps) {
+  const navigate = useNavigate()
+  const { user } = useFirebaseUser()
+
+  async function handleLogout() {
+    await logout()
+    await navigate({ to: '/login' })
+  }
+
+  const displayName = user?.displayName || 'PetGuard User'
+  const email = user?.email || 'No email'
+  const initials = getInitials(displayName, email)
+
   return (
+    <ProtectedRoute>
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--sea-ink)]">
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-[280px] flex-col border-r border-slate-200/80 bg-white/80 backdrop-blur-xl xl:flex">
         <div className="flex items-center gap-3 px-6 pb-6 pt-6">
@@ -77,18 +95,44 @@ export default function AppShell({ title, subtitle, badge, children }: AppShellP
           ))}
         </nav>
 
-        <div className="px-4 pb-6">
-          <div className="rounded-3xl border border-teal-100 bg-gradient-to-br from-teal-50 to-cyan-50 p-4 shadow-sm">
-            <p className="text-sm font-bold text-slate-950">4 pets covered</p>
-            <p className="mt-1 text-xs leading-5 text-slate-600">
-              Real-time geofences, live tracking, family sharing, and battery monitoring in one place.
-            </p>
-            <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-teal-700">
-              <BatteryCharging className="h-4 w-4" />
-              2 collars charging, 2 active
-            </div>
+      <div className="space-y-3 px-4 pb-6">
+        <div className="rounded-3xl border border-teal-100 bg-gradient-to-br from-teal-50 to-cyan-50 p-4 shadow-sm">
+          <p className="text-sm font-bold text-slate-950">4 pets covered</p>
+          <p className="mt-1 text-xs leading-5 text-slate-600">
+            Real-time geofences, live tracking, family sharing, and battery monitoring in one place.
+          </p>
+          <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-teal-700">
+            <BatteryCharging className="h-4 w-4" />
+            2 collars charging, 2 active
           </div>
         </div>
+
+        <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-sm font-black text-white">
+              {initials || <UserRound className="h-5 w-5" />}
+            </div>
+
+            <div className="min-w-0">
+              <p className="truncate text-sm font-black text-slate-950">
+                {displayName}
+              </p>
+              <p className="truncate text-xs font-medium text-slate-500">
+                {email}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-100 px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-red-50 hover:text-red-700"
+          >
+            <LogOut className="h-4 w-4" />
+            Wyloguj
+          </button>
+        </div>
+      </div>
       </aside>
 
       <header className="sticky top-0 z-30 border-b border-white/60 bg-white/75 backdrop-blur-xl xl:ml-[280px]">
@@ -119,6 +163,31 @@ export default function AppShell({ title, subtitle, badge, children }: AppShellP
                   className="w-56 border-0 bg-transparent text-sm outline-none placeholder:text-slate-400"
                 />
               </div>
+
+              <div className="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-2 shadow-sm">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-50 text-xs font-black text-teal-800">
+                  {initials || <UserRound className="h-4 w-4" />}
+                </div>
+
+                <div className="hidden min-w-0 sm:block">
+                  <p className="max-w-36 truncate text-xs font-black text-slate-950">
+                    {displayName}
+                  </p>
+                  <p className="max-w-36 truncate text-[11px] font-medium text-slate-500">
+                    {email}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 shadow-sm transition hover:border-red-100 hover:bg-red-50 hover:text-red-700"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Wyloguj</span>
+              </button>
+
               <ThemeToggle />
             </div>
           </div>
@@ -152,5 +221,17 @@ export default function AppShell({ title, subtitle, badge, children }: AppShellP
         </div>
       </main>
     </div>
+    </ProtectedRoute>
   )
+}
+
+function getInitials(name: string, email: string) {
+  const source = name !== 'PetGuard User' ? name : email
+
+  return source
+    .split(/[.\s@_-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('')
 }
