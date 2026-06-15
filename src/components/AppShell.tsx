@@ -22,7 +22,6 @@ import { useFirebaseUser } from '#/hooks/useFirebaseUser'
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/safety-zones', label: 'Safety Zones', icon: MapPinned },
-  { to: '/health-insights', label: 'Health Insights', icon: DatabaseZap },
   { to: '/family-group', label: 'Family Group', icon: Users },
   { to: '/devices', label: 'Devices', icon: Dog },
   { to: '/billing', label: 'Billing', icon: BellRing },
