@@ -20,7 +20,7 @@ function AboutPage() {
           ['Health insight', 'Activity, sleep, and recovery metrics in one place.'],
           ['Billing and devices', 'Manage collars and subscriptions without leaving the app.'],
         ].map(([title, description]) => (
-          <article key={title} className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+          <article key={title} className="card p-5">
             <h2 className="text-base font-bold text-slate-950">{title}</h2>
             <p className="mt-2 text-sm leading-6 text-slate-500">{description}</p>
           </article>
@@ -28,7 +28,7 @@ function AboutPage() {
       </section>
 
       <section className="mt-6 grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-        <article className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
+        <article className="card p-6">
           <div className="inline-flex items-center gap-2 text-sm font-semibold text-teal-700">
             <Sparkles className="h-4 w-4" />
             What was rebuilt
