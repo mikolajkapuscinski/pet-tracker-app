@@ -8,7 +8,7 @@ import {
   Dog,
   LayoutDashboard,
   MapPinned,
-  ShieldCheck,
+  ShieldAlert,
   Settings2,
   Users,
   LogOut,
@@ -79,7 +79,7 @@ export default function AppShell({ title, subtitle, badge, children }: AppShellP
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-[280px] flex-col border-r border-slate-200/80 bg-white/80 backdrop-blur-xl xl:flex">
         <div className="flex items-center gap-3 px-6 pb-6 pt-6">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-400 text-white shadow-lg shadow-teal-500/20">
-            <ShieldCheck className="h-5 w-5" />
+            <ShieldAlert className="h-5 w-5" />
           </div>
           <div>
             <p className="text-lg font-black tracking-tight text-slate-950">PetGuard Pro</p>
