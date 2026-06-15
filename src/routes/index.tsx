@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowRight, ScanSearch, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowRight, ScanSearch, Sparkles } from 'lucide-react'
 
 export const Route = createFileRoute('/')({ component: App })
 

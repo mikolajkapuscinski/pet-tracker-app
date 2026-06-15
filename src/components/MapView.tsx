@@ -3,15 +3,12 @@ import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { PetProfile, SafetyZone } from '../lib/petguard-data'
+import { petAvatar } from '../lib/petguard-data'
 
 type MapViewProps = {
   pets: PetProfile[]
   zones: SafetyZone[]
   mode?: 'dashboard' | 'zones'
-}
-
-function petAvatar(seed: string) {
-  return `https://api.dicebear.com/9.x/thumbs/svg?seed=${encodeURIComponent(seed)}`
 }
 
 function petIcon(color: string) {

@@ -12,7 +12,6 @@ import {
   Settings2,
   Users,
 } from 'lucide-react'
-import ThemeToggle from './ThemeToggle'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -119,7 +118,6 @@ export default function AppShell({ title, subtitle, badge, children }: AppShellP
                   className="w-56 border-0 bg-transparent text-sm outline-none placeholder:text-slate-400"
                 />
               </div>
-              <ThemeToggle />
             </div>
           </div>
 

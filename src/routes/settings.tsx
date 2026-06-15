@@ -1,13 +1,50 @@
+import { useCallback, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Bell, Contact, ShieldAlert, Smartphone } from 'lucide-react'
 import AppShell from '../components/AppShell'
+import ActionButton from '../components/ActionButton'
 import { notificationPreferences } from '../lib/petguard-data'
+import { saveNotificationPreferences } from '../lib/services/settings'
 
 export const Route = createFileRoute('/settings')({
   component: SettingsPage,
 })
 
+function Toggle({ enabled, onToggle, label }: { enabled: boolean; onToggle: () => void; label: string }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={enabled}
+      aria-label={label}
+      onClick={onToggle}
+      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 ${
+        enabled ? 'bg-teal-500' : 'bg-slate-200'
+      }`}
+    >
+      <span
+        className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm ring-0 transition-transform duration-200 ${
+          enabled ? 'translate-x-5' : 'translate-x-0'
+        }`}
+      />
+    </button>
+  )
+}
+
 function SettingsPage() {
+  const [prefs, setPrefs] = useState(notificationPreferences)
+
+  function toggle(index: number) {
+    setPrefs((prev) =>
+      prev.map((p, i) => (i === index ? { ...p, enabled: !p.enabled } : p))
+    )
+  }
+
+  const onSave = useCallback(
+    () => saveNotificationPreferences(prefs.map(({ label, enabled }) => ({ label, enabled }))),
+    [prefs],
+  )
+
   return (
     <AppShell
       title="Settings"
@@ -15,22 +52,30 @@ function SettingsPage() {
       badge="Preferences"
     >
       <section className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-        <article className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-black tracking-tight text-slate-950">Notification preferences</h2>
+        <article className="card p-6">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="text-2xl font-black tracking-tight text-slate-950">Notification preferences</h2>
+            <ActionButton
+              fn={onSave}
+              label="Save notification preferences"
+              doneLabel="Saved!"
+              className="rounded-full bg-teal-600 px-4 py-2 text-sm font-bold text-white hover:bg-teal-700"
+            >
+              Save
+            </ActionButton>
+          </div>
           <div className="mt-5 space-y-3">
-            {notificationPreferences.map((pref) => (
-              <div key={pref.label} className="flex items-start justify-between gap-4 rounded-3xl bg-slate-50 p-4">
+            {prefs.map((pref, index) => (
+              <div key={pref.label} className="flex items-center justify-between gap-4 rounded-3xl bg-slate-50 p-4">
                 <div>
                   <p className="font-bold text-slate-950">{pref.label}</p>
                   <p className="mt-1 text-sm leading-6 text-slate-500">{pref.description}</p>
                 </div>
-                <span
-                  className={`mt-1 inline-flex rounded-full px-3 py-1 text-xs font-bold ${
-                    pref.enabled ? 'bg-teal-50 text-teal-700' : 'bg-slate-200 text-slate-600'
-                  }`}
-                >
-                  {pref.enabled ? 'On' : 'Off'}
-                </span>
+                <Toggle
+                  enabled={pref.enabled}
+                  onToggle={() => toggle(index)}
+                  label={`Toggle ${pref.label}`}
+                />
               </div>
             ))}
           </div>
@@ -48,7 +93,7 @@ function SettingsPage() {
             </p>
           </div>
 
-          <div className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="card p-6">
             <div className="space-y-3 text-sm text-slate-600">
               <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4">
                 <Smartphone className="h-5 w-5 text-teal-600" />
