@@ -1,11 +1,85 @@
+import { useCallback, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { MessageCircleHeart, ShieldCheck, Users } from 'lucide-react'
+import { MessageCircleHeart, ShieldCheck, UserMinus, UserPlus, Users } from 'lucide-react'
 import AppShell from '../components/AppShell'
+import ActionButton from '../components/ActionButton'
 import { familyMembers } from '../lib/petguard-data'
+import { inviteMember, removeMember } from '../lib/services/family'
 
 export const Route = createFileRoute('/family-group')({
   component: FamilyGroupPage,
 })
+
+function MemberCard({ member }: { member: typeof familyMembers[number] }) {
+  const onRemove = useCallback(() => removeMember(member.name), [member.name])
+
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-lg font-black tracking-tight text-slate-950">{member.name}</p>
+          <p className="text-sm text-slate-500">{member.role}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-500">
+            {member.status}
+          </span>
+          <ActionButton
+            fn={onRemove}
+            label={`Remove ${member.name} from family group`}
+            doneLabel="✓"
+            className="rounded-xl p-1.5 text-slate-300 hover:bg-red-50 hover:text-red-500"
+          >
+            <UserMinus className="h-4 w-4" />
+          </ActionButton>
+        </div>
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {member.permissions.map((permission) => (
+          <span
+            key={permission}
+            className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600"
+          >
+            {permission}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function InviteForm() {
+  const [email, setEmail] = useState('')
+  const onInvite = useCallback(() => {
+    if (!email.trim()) return Promise.resolve()
+    return inviteMember(email.trim()).then(() => setEmail(''))
+  }, [email])
+
+  return (
+    <div className="mt-5 rounded-3xl border border-slate-200 bg-slate-50 p-4">
+      <p className="text-sm font-bold text-slate-950">Invite a caregiver</p>
+      <div className="mt-3 flex gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="email@example.com"
+          aria-label="Caregiver email address"
+          className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm outline-none placeholder:text-slate-400 focus:border-teal-400 focus:ring-1 focus:ring-teal-400"
+        />
+        <ActionButton
+          fn={onInvite}
+          label="Send invite"
+          doneLabel="Sent!"
+          className="inline-flex items-center gap-2 rounded-2xl bg-teal-600 px-4 py-2 text-sm font-bold text-white hover:bg-teal-700"
+        >
+          <UserPlus className="h-4 w-4" />
+          Invite
+        </ActionButton>
+      </div>
+    </div>
+  )
+}
 
 function FamilyGroupPage() {
   return (
@@ -15,12 +89,10 @@ function FamilyGroupPage() {
       badge="Collaboration"
     >
       <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <article className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+        <article className="card p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-                Shared access
-              </p>
+              <p className="section-kicker">Shared access</p>
               <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950">
                 Trusted caregivers
               </h2>
@@ -33,29 +105,11 @@ function FamilyGroupPage() {
 
           <div className="mt-5 space-y-3">
             {familyMembers.map((member) => (
-              <div key={member.name} className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-lg font-black tracking-tight text-slate-950">{member.name}</p>
-                    <p className="text-sm text-slate-500">{member.role}</p>
-                  </div>
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-500">
-                    {member.status}
-                  </span>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {member.permissions.map((permission) => (
-                    <span
-                      key={permission}
-                      className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600"
-                    >
-                      {permission}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <MemberCard key={member.name} member={member} />
             ))}
           </div>
+
+          <InviteForm />
         </article>
 
         <aside className="space-y-4">
@@ -70,7 +124,7 @@ function FamilyGroupPage() {
             </p>
           </div>
 
-          <div className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="card p-5">
             <h3 className="text-lg font-black tracking-tight text-slate-950">Recent activity</h3>
             <div className="mt-4 space-y-3 text-sm text-slate-600">
               <div className="rounded-2xl bg-slate-50 p-4">

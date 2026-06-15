@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowUpRight, MoonStar, Activity } from 'lucide-react'
 import AppShell from '../components/AppShell'
-import { activitySeries, healthSignals, pets, weekLabels } from '../lib/petguard-data'
+import { activitySeries, healthSignals, petAvatar, pets, weekLabels } from '../lib/petguard-data'
 
 export const Route = createFileRoute('/health-insights')({
   component: HealthInsightsPage,
@@ -16,7 +16,7 @@ function HealthInsightsPage() {
     >
       <section className="grid gap-4 sm:grid-cols-3">
         {healthSignals.map((signal) => (
-          <article key={signal.label} className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+          <article key={signal.label} className="card p-5">
             <p className="text-sm font-medium text-slate-500">{signal.label}</p>
             <p className="mt-2 text-3xl font-black tracking-tight text-slate-950">{signal.value}</p>
             <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">
@@ -28,10 +28,10 @@ function HealthInsightsPage() {
       </section>
 
       <section className="mt-6 grid gap-6 xl:grid-cols-[1.5fr_0.9fr]">
-        <article className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+        <article className="card p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+              <p className="section-kicker">
                 Activity distribution
               </p>
               <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950">
@@ -74,11 +74,11 @@ function HealthInsightsPage() {
             </div>
           </div>
 
-          <div className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="card p-5">
             <h3 className="text-lg font-black tracking-tight text-slate-950">Selected pet</h3>
             <div className="mt-4 flex items-center gap-3 rounded-3xl bg-slate-50 p-4">
               <img
-                src={`https://api.dicebear.com/9.x/thumbs/svg?seed=${encodeURIComponent(pets[0].avatarSeed)}`}
+                src={petAvatar(pets[0].avatarSeed)}
                 alt={pets[0].name}
                 className="h-12 w-12 rounded-full border border-slate-200 bg-white"
               />

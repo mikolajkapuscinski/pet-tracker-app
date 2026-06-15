@@ -200,6 +200,10 @@ export const activitySeries = [40, 58, 34, 62, 80, 94, 72]
 
 export const weekLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
+export function petAvatar(seed: string) {
+  return `https://api.dicebear.com/9.x/thumbs/svg?seed=${encodeURIComponent(seed)}`
+}
+
 export const healthSignals = [
   { label: 'Average daily steps', value: '8,432', delta: '+12% this week' },
   { label: 'Sleep quality', value: '88/100', delta: 'Stable' },

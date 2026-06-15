@@ -1,12 +1,67 @@
+import { useCallback } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Edit3, MapPinned, ToggleLeft } from 'lucide-react'
 import AppShell from '../components/AppShell'
+import ActionButton from '../components/ActionButton'
 import MapView from '../components/MapView'
 import { pets, safetyZones } from '../lib/petguard-data'
+import { addZone, editZone } from '../lib/services/zones'
 
 export const Route = createFileRoute('/safety-zones')({
   component: SafetyZonesPage,
 })
+
+function ZoneCard({ zone }: { zone: typeof safetyZones[number] }) {
+  const onEdit = useCallback(() => editZone(zone.name), [zone.name])
+
+  return (
+    <article className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full" style={{ backgroundColor: zone.color }} />
+            <p className="font-bold text-slate-950">{zone.name}</p>
+          </div>
+          <p className="mt-1 text-sm text-slate-500">{zone.rule}</p>
+        </div>
+        <ActionButton
+          fn={onEdit}
+          label={`Edit ${zone.name} zone`}
+          doneLabel="✓"
+          className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-200 hover:text-slate-700"
+        >
+          <Edit3 className="h-4 w-4" />
+        </ActionButton>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+        <div className="rounded-2xl bg-white p-3">
+          <p className="text-xs text-slate-400">Radius</p>
+          <p className="mt-1 font-bold text-slate-950">{zone.radiusMeters} m</p>
+        </div>
+        <div className="rounded-2xl bg-white p-3">
+          <p className="text-xs text-slate-400">Status</p>
+          <p className="mt-1 font-bold text-teal-700">{zone.status}</p>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function AddZoneButton() {
+  const onAdd = useCallback(() => addZone('New zone'), [])
+  return (
+    <ActionButton
+      fn={onAdd}
+      label="Add new zone"
+      doneLabel="Zone added!"
+      className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200"
+    >
+      <MapPinned className="h-4 w-4" />
+      Add zone
+    </ActionButton>
+  )
+}
 
 function SafetyZonesPage() {
   return (
@@ -19,9 +74,7 @@ function SafetyZonesPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-                OpenStreetMap
-              </p>
+              <p className="section-kicker">OpenStreetMap</p>
               <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950">
                 Geofence coverage
               </h2>
@@ -30,52 +83,18 @@ function SafetyZonesPage() {
               3 active zones
             </span>
           </div>
-
           <MapView pets={pets} zones={safetyZones} mode="zones" />
         </div>
 
-        <aside className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+        <aside className="card p-5">
           <div className="flex items-center justify-between gap-3">
             <h3 className="text-lg font-black tracking-tight text-slate-950">Zones</h3>
-            <button className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
-              <MapPinned className="h-4 w-4" />
-              Add zone
-            </button>
+            <AddZoneButton />
           </div>
 
           <div className="mt-4 space-y-3">
             {safetyZones.map((zone) => (
-              <article
-                key={zone.name}
-                className="rounded-3xl border border-slate-200 bg-slate-50 p-4"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="h-3 w-3 rounded-full"
-                        style={{ backgroundColor: zone.color }}
-                      />
-                      <p className="font-bold text-slate-950">{zone.name}</p>
-                    </div>
-                    <p className="mt-1 text-sm text-slate-500">{zone.rule}</p>
-                  </div>
-                  <button className="text-slate-400 transition hover:text-slate-700">
-                    <Edit3 className="h-4 w-4" />
-                  </button>
-                </div>
-
-                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                  <div className="rounded-2xl bg-white p-3">
-                    <p className="text-xs text-slate-400">Radius</p>
-                    <p className="mt-1 font-bold text-slate-950">{zone.radiusMeters} m</p>
-                  </div>
-                  <div className="rounded-2xl bg-white p-3">
-                    <p className="text-xs text-slate-400">Status</p>
-                    <p className="mt-1 font-bold text-teal-700">{zone.status}</p>
-                  </div>
-                </div>
-              </article>
+              <ZoneCard key={zone.name} zone={zone} />
             ))}
           </div>
 
