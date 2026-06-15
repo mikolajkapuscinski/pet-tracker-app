@@ -4,10 +4,15 @@ import {
   signOut,
   updateProfile,
 } from 'firebase/auth'
+import ReactGA from 'react-ga4'
 
 import { auth } from './firebase.config'
 
 export async function loginWithEmail(email: string, password: string) {
+  ReactGA.event({
+    category: 'Auth',
+    action: 'Login',
+  })
   return signInWithEmailAndPassword(auth, email, password)
 }
 
@@ -32,6 +37,10 @@ export async function registerWithEmail(params: {
 }
 
 export function logout() {
+    ReactGA.event({
+        category: 'Auth',
+        action: 'Logout',
+    })
   return signOut(auth)
 }
 
