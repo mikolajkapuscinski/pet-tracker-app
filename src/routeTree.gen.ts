@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SafetyZonesRouteImport } from './routes/safety-zones'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as HealthInsightsRouteImport } from './routes/health-insights'
 import { Route as FamilyGroupRouteImport } from './routes/family-group'
 import { Route as DevicesRouteImport } from './routes/devices'
@@ -27,6 +29,16 @@ const SettingsRoute = SettingsRouteImport.update({
 const SafetyZonesRoute = SafetyZonesRouteImport.update({
   id: '/safety-zones',
   path: '/safety-zones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HealthInsightsRoute = HealthInsightsRouteImport.update({
@@ -73,6 +85,8 @@ export interface FileRoutesByFullPath {
   '/devices': typeof DevicesRoute
   '/family-group': typeof FamilyGroupRoute
   '/health-insights': typeof HealthInsightsRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/safety-zones': typeof SafetyZonesRoute
   '/settings': typeof SettingsRoute
 }
@@ -84,6 +98,8 @@ export interface FileRoutesByTo {
   '/devices': typeof DevicesRoute
   '/family-group': typeof FamilyGroupRoute
   '/health-insights': typeof HealthInsightsRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/safety-zones': typeof SafetyZonesRoute
   '/settings': typeof SettingsRoute
 }
@@ -96,6 +112,8 @@ export interface FileRoutesById {
   '/devices': typeof DevicesRoute
   '/family-group': typeof FamilyGroupRoute
   '/health-insights': typeof HealthInsightsRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/safety-zones': typeof SafetyZonesRoute
   '/settings': typeof SettingsRoute
 }
@@ -109,6 +127,8 @@ export interface FileRouteTypes {
     | '/devices'
     | '/family-group'
     | '/health-insights'
+    | '/login'
+    | '/register'
     | '/safety-zones'
     | '/settings'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +140,8 @@ export interface FileRouteTypes {
     | '/devices'
     | '/family-group'
     | '/health-insights'
+    | '/login'
+    | '/register'
     | '/safety-zones'
     | '/settings'
   id:
@@ -131,6 +153,8 @@ export interface FileRouteTypes {
     | '/devices'
     | '/family-group'
     | '/health-insights'
+    | '/login'
+    | '/register'
     | '/safety-zones'
     | '/settings'
   fileRoutesById: FileRoutesById
@@ -143,6 +167,8 @@ export interface RootRouteChildren {
   DevicesRoute: typeof DevicesRoute
   FamilyGroupRoute: typeof FamilyGroupRoute
   HealthInsightsRoute: typeof HealthInsightsRoute
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
   SafetyZonesRoute: typeof SafetyZonesRoute
   SettingsRoute: typeof SettingsRoute
 }
@@ -161,6 +187,20 @@ declare module '@tanstack/react-router' {
       path: '/safety-zones'
       fullPath: '/safety-zones'
       preLoaderRoute: typeof SafetyZonesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/health-insights': {
@@ -223,6 +263,8 @@ const rootRouteChildren: RootRouteChildren = {
   DevicesRoute: DevicesRoute,
   FamilyGroupRoute: FamilyGroupRoute,
   HealthInsightsRoute: HealthInsightsRoute,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
   SafetyZonesRoute: SafetyZonesRoute,
   SettingsRoute: SettingsRoute,
 }

@@ -15,6 +15,7 @@
     "check": "biome check"
   },
   "dependencies": {
+    "@hotjar/browser": "^1.0.9",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-router": "latest",
@@ -27,6 +28,7 @@
     "lucide-react": "^0.545.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-ga4": "^3.0.1",
     "react-leaflet": "^5.0.0",
     "tailwindcss": "^4.1.18"
   },
